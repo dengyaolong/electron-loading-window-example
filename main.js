@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, BrowserView, ipcMain} = require('electron')
 const path = require('path')
 
 function createWindow () {
@@ -9,14 +9,29 @@ function createWindow () {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
-    }
+    },
+    show: false,
   })
+
+	let view = new BrowserView()
+	mainWindow.setBrowserView(view)
+	view.setBounds({ x: 0, y: 0, width: 800, height: 600 })
+	view.webContents.loadFile('loading.html')
+    view.webContents.on('dom-ready', () => {
+        console.log('show')
+        mainWindow.show()
+    })
+    ipcMain.on('stop-loading-main', () => {
+        mainWindow.removeBrowserView(view)
+    })
+
+
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

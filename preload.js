@@ -10,3 +10,8 @@ window.addEventListener('DOMContentLoaded', () => {
     replaceText(`${type}-version`, process.versions[type])
   }
 })
+
+window.stopLoading = function() {
+    let {ipcRenderer} = window.require('electron')
+    ipcRenderer.send('stop-loading-main')
+}
