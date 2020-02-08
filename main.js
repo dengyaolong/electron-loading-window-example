@@ -22,6 +22,7 @@ function createWindow () {
         mainWindow.show()
     })
     ipcMain.on('stop-loading-main', () => {
+        console.log('stop')
         mainWindow.removeBrowserView(view)
     })
 
@@ -29,6 +30,7 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
+  // mainWindow.loadURL('https://raw.githubusercontent.com/dengyaolong/electron-loading-window-example/master/index.html')
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
